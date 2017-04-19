@@ -125,6 +125,13 @@ namespace InputRegistrar
 
 		protected virtual void SwitchDoubleAxisAction(KeyValuePair<AxisGesture, TAxis> _binding) { }
 
+		protected void RegisterButton(InputValue value, TButton _button)
+		{
+			RegisterButton(new ButtonGesture(value, ButtonAction.OnPressDown), _button);
+			RegisterButton(new ButtonGesture(value, ButtonAction.OnPress), _button);
+			RegisterButton(new ButtonGesture(value, ButtonAction.OnPressUp), _button);
+		}
+
 		protected void RegisterButton(ButtonGesture _gesture, TButton _button)
 		{
 			m_buttonBindings.Add(_gesture, _button);
