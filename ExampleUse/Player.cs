@@ -1,9 +1,9 @@
-﻿using UnityEngine;
+using UnityEngine;
 using InputRegistrar;
 
 public class Player : MonoBehaviour
 {
-	[Range(1, 4)]
+	[Range(0, 4)]
 	[SerializeField]
 	private int m_controllerNumber;
 
