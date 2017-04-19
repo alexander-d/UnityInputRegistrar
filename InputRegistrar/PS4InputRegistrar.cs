@@ -16,65 +16,20 @@ namespace InputRegistrar
 			base.Initialise();
 
 			//Face Buttons
-			RegisterButton(new ButtonGesture(InputValue.Alpha, ButtonAction.OnPressDown), ButtonInput.PS4.X);
-			RegisterButton(new ButtonGesture(InputValue.Alpha, ButtonAction.OnPress), ButtonInput.PS4.X);
-			RegisterButton(new ButtonGesture(InputValue.Alpha, ButtonAction.OnPressUp), ButtonInput.PS4.X);
-			RegisterButton(new ButtonGesture(InputValue.Beta, ButtonAction.OnPressDown), ButtonInput.PS4.Circle);
-			RegisterButton(new ButtonGesture(InputValue.Beta, ButtonAction.OnPress), ButtonInput.PS4.Circle);
-			RegisterButton(new ButtonGesture(InputValue.Beta, ButtonAction.OnPressUp), ButtonInput.PS4.Circle);
-			RegisterButton(new ButtonGesture(InputValue.Gamma, ButtonAction.OnPressDown), ButtonInput.PS4.Square);
-			RegisterButton(new ButtonGesture(InputValue.Gamma, ButtonAction.OnPress), ButtonInput.PS4.Square);
-			RegisterButton(new ButtonGesture(InputValue.Gamma, ButtonAction.OnPressUp), ButtonInput.PS4.Square);
-			RegisterButton(new ButtonGesture(InputValue.Delta, ButtonAction.OnPressDown), ButtonInput.PS4.Triangle);
-			RegisterButton(new ButtonGesture(InputValue.Delta, ButtonAction.OnPress), ButtonInput.PS4.Triangle);
-			RegisterButton(new ButtonGesture(InputValue.Delta, ButtonAction.OnPressUp), ButtonInput.PS4.Triangle);
+			RegisterButton(InputValue.Alpha, ButtonInput.PS4.X);
+			RegisterButton(InputValue.Beta, ButtonInput.PS4.Circle);
+			RegisterButton(InputValue.Gamma, ButtonInput.PS4.Square);
+			RegisterButton(InputValue.Delta, ButtonInput.PS4.Triangle);
 
 			//Axes
-			RegisterAxis(new AxisGesture(InputValue.Alpha, AxisAction.GetAxis), AxisInput.PS4.LeftX);
-			RegisterAxis(new AxisGesture(InputValue.Beta, AxisAction.GetAxis), AxisInput.PS4.LeftY);
-			RegisterAxis(new AxisGesture(InputValue.Gamma, AxisAction.GetAxis), AxisInput.PS4.RightX);
-			RegisterAxis(new AxisGesture(InputValue.Delta, AxisAction.GetAxis), AxisInput.PS4.RightY);
-			RegisterAxis(new AxisGesture(InputValue.Epsilon, AxisAction.GetAxis), AxisInput.PS4.DPadX);
-			RegisterAxis(new AxisGesture(InputValue.Zeta, AxisAction.GetAxis), AxisInput.PS4.DPadY);
-			RegisterAxis(new AxisGesture(InputValue.Eta, AxisAction.GetAxis), AxisInput.PS4.L2);
-			RegisterAxis(new AxisGesture(InputValue.Theta, AxisAction.GetAxis), AxisInput.PS4.R2);
-		}
-
-		protected override void SwitchButtonAction(KeyValuePair<ButtonGesture, ButtonInput.PS4> binding)
-		{
-			string buttonAxis = ((int)binding.Value).ToString();
-			switch (binding.Key.ButtonAction)
-			{
-				case ButtonAction.OnPressDown:
-					if (Input.GetKeyDown("joystick " + m_controllerNumber.ToString() + " button " + buttonAxis))
-						m_buttonEvents[binding.Key]();
-					break;
-
-				case ButtonAction.OnPress:
-					if (Input.GetKey("joystick " + m_controllerNumber.ToString() + " button " + buttonAxis))
-						m_buttonEvents[binding.Key]();
-					break;
-
-				case ButtonAction.OnPressUp:
-					if (Input.GetKeyUp("joystick " + m_controllerNumber.ToString() + " button " + buttonAxis))
-						m_buttonEvents[binding.Key]();
-					break;
-
-				case ButtonAction.OnTouchDown:
-					if (Input.GetKeyDown("joystick " + m_controllerNumber.ToString() + " button " + buttonAxis))
-						m_buttonEvents[binding.Key]();
-					break;
-
-				case ButtonAction.OnTouch:
-					if (Input.GetKey("joystick " + m_controllerNumber.ToString() + " button " + buttonAxis))
-						m_buttonEvents[binding.Key]();
-					break;
-
-				case ButtonAction.OnTouchUp:
-					if (Input.GetKeyUp("joystick " + m_controllerNumber.ToString() + " button " + buttonAxis))
-						m_buttonEvents[binding.Key]();
-					break;
-			}
+			RegisterAxis(InputValue.Alpha, AxisInput.PS4.LeftX);
+			RegisterAxis(InputValue.Beta, AxisInput.PS4.LeftY);
+			RegisterAxis(InputValue.Gamma, AxisInput.PS4.RightX);
+			RegisterAxis(InputValue.Delta, AxisInput.PS4.RightY);
+			RegisterAxis(InputValue.Epsilon, AxisInput.PS4.DPadX);
+			RegisterAxis(InputValue.Zeta, AxisInput.PS4.DPadY);
+			RegisterAxis(InputValue.Eta, AxisInput.PS4.L2);
+			RegisterAxis(InputValue.Theta, AxisInput.PS4.R2);
 		}
 
 		protected override void SwitchAxisAction(KeyValuePair<AxisGesture, AxisInput.PS4> binding)

@@ -7,7 +7,6 @@ using System;
 
 namespace InputRegistrar
 {
-	[System.Serializable]
 	public enum InputMethod
 	{
 		Keyboard,
@@ -288,37 +287,37 @@ namespace InputRegistrar
 			}
 		}
 
-		public void RegisterButtonInput(ButtonGesture _gesture, Action _event)
+		public void RegisterButtonInput(ButtonGesture _gesture, Action action)
 		{
 			foreach (ButtonGesture gesture in m_inputRegistrar.m_buttonEvents.Keys.ToArray())
 			{
 				if (gesture == _gesture)
 				{
-					m_inputRegistrar.m_buttonEvents[gesture] += _event;
+					m_inputRegistrar.m_buttonEvents[gesture] += action;
 					break;
 				}
 			}
 		}
 
-		public void RegisterAxisInput(AxisGesture _gesture, Action<float> _event)
+		public void RegisterAxisInput(AxisGesture _gesture, Action<float> action)
 		{
 			foreach (AxisGesture gesture in m_inputRegistrar.m_axisEvents.Keys.ToArray())
 			{
 				if (gesture == _gesture)
 				{
-					m_inputRegistrar.m_axisEvents[gesture] += _event;
+					m_inputRegistrar.m_axisEvents[gesture] += action;
 					break;
 				}
 			}
 		}
 
-		public void RegisterAxisInput(AxisGesture _gesture, Action<Vector2> _event)
+		public void RegisterAxisInput(AxisGesture _gesture, Action<Vector2> action)
 		{
 			foreach (AxisGesture gesture in m_inputRegistrar.m_doubleAxisEvents.Keys.ToArray())
 			{
 				if (gesture == _gesture)
 				{
-					m_inputRegistrar.m_doubleAxisEvents[gesture] += _event;
+					m_inputRegistrar.m_doubleAxisEvents[gesture] += action;
 					break;
 				}
 			}
@@ -336,13 +335,13 @@ namespace InputRegistrar
 			}
 		}
 
-		public void UnregisterButtonInput(ButtonGesture _gesture, Action _event)
+		public void UnregisterButtonInput(ButtonGesture _gesture, Action action)
 		{
 			foreach (ButtonGesture gesture in m_inputRegistrar.m_buttonEvents.Keys.ToArray())
 			{
 				if (gesture == _gesture)
 				{
-					m_inputRegistrar.m_buttonEvents[gesture] -= _event;
+					m_inputRegistrar.m_buttonEvents[gesture] -= action;
 					break;
 				}
 			}
@@ -360,25 +359,25 @@ namespace InputRegistrar
 			}
 		}
 
-		public void UnregisterAxisInput(AxisGesture _gesture, Action<float> _event)
+		public void UnregisterAxisInput(AxisGesture _gesture, Action<float> action)
 		{
 			foreach (AxisGesture gesture in m_inputRegistrar.m_axisEvents.Keys.ToArray())
 			{
 				if (gesture == _gesture)
 				{
-					m_inputRegistrar.m_axisEvents[gesture] -= _event;
+					m_inputRegistrar.m_axisEvents[gesture] -= action;
 					break;
 				}
 			}
 		}
 
-		public void UnregisterAxisInput(AxisGesture _gesture, Action<Vector2> _event)
+		public void UnregisterAxisInput(AxisGesture _gesture, Action<Vector2> action)
 		{
 			foreach (AxisGesture gesture in m_inputRegistrar.m_doubleAxisEvents.Keys.ToArray())
 			{
 				if (gesture == _gesture)
 				{
-					m_inputRegistrar.m_doubleAxisEvents[gesture] -= _event;
+					m_inputRegistrar.m_doubleAxisEvents[gesture] -= action;
 					break;
 				}
 			}

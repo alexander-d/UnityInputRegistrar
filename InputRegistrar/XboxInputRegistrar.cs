@@ -16,65 +16,20 @@ namespace InputRegistrar
 			base.Initialise();
 
 			//Face Buttons
-			RegisterButton(new ButtonGesture(InputValue.Alpha, ButtonAction.OnPressDown), ButtonInput.Xbox.A);
-			RegisterButton(new ButtonGesture(InputValue.Alpha, ButtonAction.OnPress), ButtonInput.Xbox.A);
-			RegisterButton(new ButtonGesture(InputValue.Alpha, ButtonAction.OnPressUp), ButtonInput.Xbox.A);
-			RegisterButton(new ButtonGesture(InputValue.Beta, ButtonAction.OnPressDown), ButtonInput.Xbox.B);
-			RegisterButton(new ButtonGesture(InputValue.Beta, ButtonAction.OnPress), ButtonInput.Xbox.B);
-			RegisterButton(new ButtonGesture(InputValue.Beta, ButtonAction.OnPressUp), ButtonInput.Xbox.B);
-			RegisterButton(new ButtonGesture(InputValue.Gamma, ButtonAction.OnPressDown), ButtonInput.Xbox.X);
-			RegisterButton(new ButtonGesture(InputValue.Gamma, ButtonAction.OnPress), ButtonInput.Xbox.X);
-			RegisterButton(new ButtonGesture(InputValue.Gamma, ButtonAction.OnPressUp), ButtonInput.Xbox.X);
-			RegisterButton(new ButtonGesture(InputValue.Delta, ButtonAction.OnPressDown), ButtonInput.Xbox.Y);
-			RegisterButton(new ButtonGesture(InputValue.Delta, ButtonAction.OnPress), ButtonInput.Xbox.Y);
-			RegisterButton(new ButtonGesture(InputValue.Delta, ButtonAction.OnPressUp), ButtonInput.Xbox.Y);
+			RegisterButton(InputValue.Alpha, ButtonInput.Xbox.A);
+			RegisterButton(InputValue.Beta, ButtonInput.Xbox.B);
+			RegisterButton(InputValue.Gamma, ButtonInput.Xbox.X);
+			RegisterButton(InputValue.Delta, ButtonInput.Xbox.Y);
 
 			//Axes
-			RegisterAxis(new AxisGesture(InputValue.Alpha, AxisAction.GetAxis), AxisInput.Xbox.LeftX);
-			RegisterAxis(new AxisGesture(InputValue.Beta, AxisAction.GetAxis), AxisInput.Xbox.LeftY);
-			RegisterAxis(new AxisGesture(InputValue.Gamma, AxisAction.GetAxis), AxisInput.Xbox.RightX);
-			RegisterAxis(new AxisGesture(InputValue.Delta, AxisAction.GetAxis), AxisInput.Xbox.RightY);
-			RegisterAxis(new AxisGesture(InputValue.Epsilon, AxisAction.GetAxis), AxisInput.Xbox.DPadX);
-			RegisterAxis(new AxisGesture(InputValue.Zeta, AxisAction.GetAxis), AxisInput.Xbox.DPadY);
-			RegisterAxis(new AxisGesture(InputValue.Eta, AxisAction.GetAxis), AxisInput.Xbox.LeftTrigger);
-			RegisterAxis(new AxisGesture(InputValue.Theta, AxisAction.GetAxis), AxisInput.Xbox.RightTrigger);
-		}
-
-		protected override void SwitchButtonAction(KeyValuePair<ButtonGesture, ButtonInput.Xbox> binding)
-		{
-			string buttonAxis = ((int)binding.Value).ToString();
-			switch (binding.Key.ButtonAction)
-			{
-				case ButtonAction.OnPressDown:
-					if (Input.GetKeyDown("joystick " + m_controllerNumber.ToString() + " button " + buttonAxis))
-						m_buttonEvents[binding.Key]();
-					break;
-
-				case ButtonAction.OnPress:
-					if (Input.GetKey("joystick " + m_controllerNumber.ToString() + " button " + buttonAxis))
-						m_buttonEvents[binding.Key]();
-					break;
-
-				case ButtonAction.OnPressUp:
-					if (Input.GetKeyUp("joystick " + m_controllerNumber.ToString() + " button " + buttonAxis))
-						m_buttonEvents[binding.Key]();
-					break;
-
-				case ButtonAction.OnTouchDown:
-					if (Input.GetKeyDown("joystick " + m_controllerNumber.ToString() + " button " + buttonAxis))
-						m_buttonEvents[binding.Key]();
-					break;
-
-				case ButtonAction.OnTouch:
-					if (Input.GetKey("joystick " + m_controllerNumber.ToString() + " button " + buttonAxis))
-						m_buttonEvents[binding.Key]();
-					break;
-
-				case ButtonAction.OnTouchUp:
-					if (Input.GetKeyUp("joystick " + m_controllerNumber.ToString() + " button " + buttonAxis))
-						m_buttonEvents[binding.Key]();
-					break;
-			}
+			RegisterAxis(InputValue.Alpha, AxisInput.Xbox.LeftX);
+			RegisterAxis(InputValue.Beta, AxisInput.Xbox.LeftY);
+			RegisterAxis(InputValue.Gamma, AxisInput.Xbox.RightX);
+			RegisterAxis(InputValue.Delta, AxisInput.Xbox.RightY);
+			RegisterAxis(InputValue.Epsilon, AxisInput.Xbox.DPadX);
+			RegisterAxis(InputValue.Zeta, AxisInput.Xbox.DPadY);
+			RegisterAxis(InputValue.Eta, AxisInput.Xbox.LeftTrigger);
+			RegisterAxis(InputValue.Theta, AxisInput.Xbox.RightTrigger);
 		}
 
 		protected override void SwitchAxisAction(KeyValuePair<AxisGesture, AxisInput.Xbox> binding)

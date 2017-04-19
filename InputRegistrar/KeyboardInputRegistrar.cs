@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace InputRegistrar
 {
-	public class KeyboardInputRegistrar : InputRegistrar<KeyCode, KeyCode>
+	public class KeyboardInputRegistrar : InputRegistrar<KeyCode>
 	{
 		public KeyboardInputRegistrar()
 		{
@@ -26,7 +26,17 @@ namespace InputRegistrar
 			RegisterButton(InputValue.Psi, KeyCode.DownArrow);
 		}
 
-		protected override void SwitchButtonAction(KeyValuePair<ButtonGesture, KeyCode> binding)
+		protected override void RegisterButton(ButtonGesture gesture, KeyCode button)
+		{
+			// TODO: this does not work, the KeyCodes do not align with the expected string inputs for some reason
+			m_buttonBindings.Add(gesture, button.ToString());
+			if (!m_buttonEvents.ContainsKey(gesture))
+			{
+				m_buttonEvents.Add(gesture, delegate { });
+			}
+		}
+
+		protected override void SwitchButtonAction(KeyValuePair<ButtonGesture, string> binding)
 		{
 			switch (binding.Key.ButtonAction)
 			{

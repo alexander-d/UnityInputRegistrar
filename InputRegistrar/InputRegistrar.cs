@@ -37,20 +37,18 @@ namespace InputRegistrar
 		}
 
 		public virtual void ShowBindings() { }
-
 		public virtual void Update() { }
-
 		public virtual void UnbindAll() { }
 	}
 
 	public class InputRegistrar<TButton> : InputRegistrar
 	{
-		protected Dictionary<ButtonGesture, TButton> m_buttonBindings;
+		protected Dictionary<ButtonGesture, string> m_buttonBindings;
 
 		public override void Initialise()
 		{
 			base.Initialise();
-			m_buttonBindings = new Dictionary<ButtonGesture, TButton>();
+			m_buttonBindings = new Dictionary<ButtonGesture, string>();
 		}
 
 		public override void ShowBindings()
@@ -60,162 +58,101 @@ namespace InputRegistrar
 
 		public override void Update()
 		{
-			foreach (KeyValuePair<ButtonGesture, TButton> binding in m_buttonBindings)
+			foreach (KeyValuePair<ButtonGesture, string> binding in m_buttonBindings)
 			{
 				SwitchButtonAction(binding);
 			}
 		}
 
-		protected virtual void SwitchButtonAction(KeyValuePair<ButtonGesture, TButton> _binding) { }
-
-		protected void RegisterButton(ButtonGesture _gesture, TButton _button)
+		protected virtual void SwitchButtonAction(KeyValuePair<ButtonGesture, string> binding)
 		{
-			m_buttonBindings.Add(_gesture, _button);
-			if (!m_buttonEvents.ContainsKey(_gesture))
+			switch (binding.Key.ButtonAction)
 			{
-				m_buttonEvents.Add(_gesture, delegate { });
+				case ButtonAction.OnPressDown:
+					if (Input.GetKeyDown(binding.Value))
+						m_buttonEvents[binding.Key]();
+					break;
+
+				case ButtonAction.OnPress:
+					if (Input.GetKey(binding.Value))
+						m_buttonEvents[binding.Key]();
+					break;
+
+				case ButtonAction.OnPressUp:
+					if (Input.GetKeyUp(binding.Value))
+						m_buttonEvents[binding.Key]();
+					break;
 			}
 		}
 
-		public override void UnbindAll()
+		protected void RegisterButton(InputValue value, TButton button)
 		{
-			m_buttonBindings.Clear();
-			m_buttonEvents.Clear();
-		}
-	}
-
-	public class InputRegistrar<TButton, TAxis> : InputRegistrar
-	{
-		protected Dictionary<ButtonGesture, TButton> m_buttonBindings;
-		protected Dictionary<AxisGesture, TAxis> m_axisBindings;
-		protected Dictionary<AxisGesture, TAxis> m_doubleAxisBindings;
-
-		public override void Initialise()
-		{
-			base.Initialise();
-			m_buttonBindings = new Dictionary<ButtonGesture, TButton>();
-			m_axisBindings = new Dictionary<AxisGesture, TAxis>();
-			m_doubleAxisBindings = new Dictionary<AxisGesture, TAxis>();
+			RegisterButton(new ButtonGesture(value, ButtonAction.OnPressDown), button);
+			RegisterButton(new ButtonGesture(value, ButtonAction.OnPress), button);
+			RegisterButton(new ButtonGesture(value, ButtonAction.OnPressUp), button);
 		}
 
-		public override void ShowBindings()
+		protected virtual void RegisterButton(ButtonGesture gesture, TButton button)
 		{
-			//TODO
-		}
-
-		public override void Update()
-		{
-			foreach (KeyValuePair<ButtonGesture, TButton> binding in m_buttonBindings)
+			if (!typeof(TButton).IsEnum)
 			{
-				SwitchButtonAction(binding);
+				Debug.LogError("TButton is not an enum");
+				return;
 			}
-			foreach (KeyValuePair<AxisGesture, TAxis> binding in m_axisBindings)
+
+			string input = string.Empty;
+			if (m_controllerNumber == 0)
 			{
-				SwitchAxisAction(binding);
+				input = "joystick button " + (int)Enum.Parse(typeof(TButton), button.ToString());
 			}
-			foreach (KeyValuePair<AxisGesture, TAxis> binding in m_doubleAxisBindings)
+			else
 			{
-				SwitchDoubleAxisAction(binding);
+				input = "joystick " + m_controllerNumber.ToString() + " button " + (int)Enum.Parse(typeof(TButton), button.ToString());
 			}
-		}
-
-		protected virtual void SwitchButtonAction(KeyValuePair<ButtonGesture, TButton> _binding) { }
-
-		protected virtual void SwitchAxisAction(KeyValuePair<AxisGesture, TAxis> _binding) { }
-
-		protected virtual void SwitchDoubleAxisAction(KeyValuePair<AxisGesture, TAxis> _binding) { }
-
-		protected void RegisterButton(InputValue value, TButton _button)
-		{
-			RegisterButton(new ButtonGesture(value, ButtonAction.OnPressDown), _button);
-			RegisterButton(new ButtonGesture(value, ButtonAction.OnPress), _button);
-			RegisterButton(new ButtonGesture(value, ButtonAction.OnPressUp), _button);
-		}
-
-		protected void RegisterButton(ButtonGesture _gesture, TButton _button)
-		{
-			m_buttonBindings.Add(_gesture, _button);
-			if (!m_buttonEvents.ContainsKey(_gesture))
-			{
-				m_buttonEvents.Add(_gesture, delegate { });
-			}
-		}
-
-		protected void RegisterAxis(AxisGesture _gesture, TAxis _axis)
-		{
-			m_axisBindings.Add(_gesture, _axis);
-			if (!m_axisEvents.ContainsKey(_gesture))
-			{
-				m_axisEvents.Add(_gesture, delegate { });
-			}
-		}
-
-		protected void RegisterDoubleAxis(AxisGesture _gesture, TAxis _axis)
-		{
-			m_doubleAxisBindings.Add(_gesture, _axis);
-			if (!m_doubleAxisEvents.ContainsKey(_gesture))
-			{
-				m_doubleAxisEvents.Add(_gesture, delegate { });
-			}
-		}
-
-		public override void UnbindAll()
-		{
-			m_buttonBindings.Clear();
-			m_buttonEvents.Clear();
-			m_axisBindings.Clear();
-			m_axisEvents.Clear();
-		}
-	}
-
-	public class InputRegistrar<TButton, TAxis, T2Axis> : InputRegistrar
-	{
-		protected Dictionary<ButtonGesture, TButton> m_buttonBindings;
-		protected Dictionary<AxisGesture, TAxis> m_axisBindings;
-		protected Dictionary<AxisGesture, T2Axis> m_doubleAxisBindings;
-
-		public override void Initialise()
-		{
-			base.Initialise();
-			m_buttonBindings = new Dictionary<ButtonGesture, TButton>();
-			m_axisBindings = new Dictionary<AxisGesture, TAxis>();
-			m_doubleAxisBindings = new Dictionary<AxisGesture, T2Axis>();
-		}
-
-		public override void ShowBindings()
-		{
-			//TODO
-		}
-
-		public override void Update()
-		{
-			foreach (KeyValuePair<ButtonGesture, TButton> binding in m_buttonBindings)
-			{
-				SwitchButtonAction(binding);
-			}
-			foreach (KeyValuePair<AxisGesture, TAxis> binding in m_axisBindings)
-			{
-				SwitchAxisAction(binding);
-			}
-			foreach (KeyValuePair<AxisGesture, T2Axis> binding in m_doubleAxisBindings)
-			{
-				SwitchDoubleAxisAction(binding);
-			}
-		}
-
-		protected virtual void SwitchButtonAction(KeyValuePair<ButtonGesture, TButton> binding) { }
-
-		protected virtual void SwitchAxisAction(KeyValuePair<AxisGesture, TAxis> binding) { }
-
-		protected virtual void SwitchDoubleAxisAction(KeyValuePair<AxisGesture, T2Axis> binding) { }
-
-		protected void RegisterButton(ButtonGesture gesture, TButton button)
-		{
-			m_buttonBindings.Add(gesture, button);
+			m_buttonBindings.Add(gesture, input);
 			if (!m_buttonEvents.ContainsKey(gesture))
 			{
 				m_buttonEvents.Add(gesture, delegate { });
 			}
+		}
+
+		public override void UnbindAll()
+		{
+			m_buttonBindings.Clear();
+			m_buttonEvents.Clear();
+		}
+	}
+
+	public class InputRegistrar<TButton, TAxis> : InputRegistrar<TButton>
+	{
+		protected Dictionary<AxisGesture, TAxis> m_axisBindings;
+
+		public override void Initialise()
+		{
+			base.Initialise();
+			m_axisBindings = new Dictionary<AxisGesture, TAxis>();
+		}
+
+		public override void ShowBindings()
+		{
+			//TODO
+		}
+
+		public override void Update()
+		{
+			base.Update();
+			foreach (KeyValuePair<AxisGesture, TAxis> binding in m_axisBindings)
+			{
+				SwitchAxisAction(binding);
+			}
+		}
+
+		protected virtual void SwitchAxisAction(KeyValuePair<AxisGesture, TAxis> binding) { }
+
+		protected void RegisterAxis(InputValue value, TAxis axis)
+		{
+			RegisterAxis(new AxisGesture(value, AxisAction.GetAxis), axis);
+			RegisterAxis(new AxisGesture(value, AxisAction.GetAxisRaw), axis);
 		}
 
 		protected void RegisterAxis(AxisGesture gesture, TAxis axis)
@@ -227,6 +164,40 @@ namespace InputRegistrar
 			}
 		}
 
+		public override void UnbindAll()
+		{
+			base.UnbindAll();
+			m_axisBindings.Clear();
+			m_axisEvents.Clear();
+		}
+	}
+
+	public class InputRegistrar<TButton, TAxis, T2Axis> : InputRegistrar
+	{
+		protected Dictionary<AxisGesture, T2Axis> m_doubleAxisBindings;
+
+		public override void Initialise()
+		{
+			base.Initialise();
+			m_doubleAxisBindings = new Dictionary<AxisGesture, T2Axis>();
+		}
+
+		public override void ShowBindings()
+		{
+			//TODO
+		}
+
+		public override void Update()
+		{
+			base.Update();
+			foreach (KeyValuePair<AxisGesture, T2Axis> binding in m_doubleAxisBindings)
+			{
+				SwitchDoubleAxisAction(binding);
+			}
+		}
+
+		protected virtual void SwitchDoubleAxisAction(KeyValuePair<AxisGesture, T2Axis> binding) { }
+
 		protected void RegisterDoubleAxis(AxisGesture gesture, T2Axis axis)
 		{
 			m_doubleAxisBindings.Add(gesture, axis);
@@ -234,14 +205,6 @@ namespace InputRegistrar
 			{
 				m_doubleAxisEvents.Add(gesture, delegate { });
 			}
-		}
-
-		public override void UnbindAll()
-		{
-			m_buttonBindings.Clear();
-			m_buttonEvents.Clear();
-			m_axisBindings.Clear();
-			m_axisEvents.Clear();
 		}
 	}
 }
