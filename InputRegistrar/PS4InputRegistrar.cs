@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace InputRegistrar
 {
-	public class PS4InputRegistrar : InputRegistrar<ButtonInput.PS4, AxisInput.PS4>
+	public class PS4InputRegistrar : GamepadInputRegistrar<ButtonInput.PS4, AxisInput.PS4>
 	{
 		public PS4InputRegistrar(int controllerNumber)
 		{
@@ -32,53 +32,42 @@ namespace InputRegistrar
 			RegisterAxis(InputValue.Theta, AxisInput.PS4.R2);
 		}
 
-		protected override void SwitchAxisAction(KeyValuePair<AxisGesture, AxisInput.PS4> binding)
+		protected override void RegisterAxis(AxisGesture gesture, AxisInput.PS4 axis)
 		{
-			string axisname = "";
-			switch (binding.Value)
+			string input = string.Empty;
+			switch (axis)
 			{
 				case AxisInput.PS4.LeftX:
-					axisname = "XAxis_";
+					input = "XAxis_";
 					break;
 				case AxisInput.PS4.LeftY:
-					axisname = "YAxis_";
+					input = "YAxis_";
 					break;
 				case AxisInput.PS4.RightX:
-					axisname = "3rd_Axis_";
+					input = "3rd_Axis_";
 					break;
 				case AxisInput.PS4.RightY:
-					axisname = "6th_Axis_";
+					input = "6th_Axis_";
 					break;
 				case AxisInput.PS4.DPadX:
-					axisname = "7th_Axis_";
+					input = "7th_Axis_";
 					break;
 				case AxisInput.PS4.DPadY:
-					axisname = "8th_Axis_";
+					input = "8th_Axis_";
 					break;
 				case AxisInput.PS4.L2:
-					axisname = "4th_Axis_";
+					input = "4th_Axis_";
 					break;
 				case AxisInput.PS4.R2:
-					axisname = "5th_Axis_";
+					input = "5th_Axis_";
 					break;
 			}
-			if (axisname != "")
+			input += m_controllerNumber;
+
+			m_axisBindings.Add(gesture, input);
+			if (!m_axisEvents.ContainsKey(gesture))
 			{
-				axisname += m_controllerNumber;
-				float value = Input.GetAxis(axisname);
-				switch (binding.Key.AxisAction)
-				{
-					case AxisAction.GetAxis:
-						if (value != 0)
-							m_axisEvents[binding.Key](value);
-						break;
-					case AxisAction.GetAxisRaw:
-						if (value > 0)
-							m_axisEvents[binding.Key](1f);
-						else if (value < 0)
-							m_axisEvents[binding.Key](-1f);
-						break;
-				}
+				m_axisEvents.Add(gesture, delegate { });
 			}
 		}
 	}

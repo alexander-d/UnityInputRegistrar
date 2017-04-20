@@ -5,6 +5,8 @@ namespace InputRegistrar
 {
 	public class KeyboardInputRegistrar : InputRegistrar<KeyCode>
 	{
+		protected Dictionary<ButtonGesture, KeyCode> m_buttonBindings;
+
 		public KeyboardInputRegistrar()
 		{
 			Initialise();
@@ -12,8 +14,10 @@ namespace InputRegistrar
 
 		public override void Initialise()
 		{
-			base.Initialise();
+			m_buttonBindings = new Dictionary<ButtonGesture, KeyCode>();
 
+			base.Initialise();
+			
 			RegisterButton(InputValue.Alpha, KeyCode.Space);
 			RegisterButton(InputValue.Beta, KeyCode.LeftControl);
 			RegisterButton(InputValue.Gamma, KeyCode.RightControl);
@@ -26,17 +30,32 @@ namespace InputRegistrar
 			RegisterButton(InputValue.Psi, KeyCode.DownArrow);
 		}
 
-		protected override void RegisterButton(ButtonGesture gesture, KeyCode button)
+		protected void RegisterButton(InputValue value, KeyCode button)
+		{
+			RegisterButton(new ButtonGesture(value, ButtonAction.OnPressDown), button);
+			RegisterButton(new ButtonGesture(value, ButtonAction.OnPress), button);
+			RegisterButton(new ButtonGesture(value, ButtonAction.OnPressUp), button);
+		}
+
+		protected virtual void RegisterButton(ButtonGesture gesture, KeyCode button)
 		{
 			// TODO: this does not work, the KeyCodes do not align with the expected string inputs for some reason
-			m_buttonBindings.Add(gesture, button.ToString());
+			m_buttonBindings.Add(gesture, button);
 			if (!m_buttonEvents.ContainsKey(gesture))
 			{
 				m_buttonEvents.Add(gesture, delegate { });
 			}
 		}
 
-		protected override void SwitchButtonAction(KeyValuePair<ButtonGesture, string> binding)
+		public override void Update()
+		{
+			foreach (KeyValuePair<ButtonGesture, KeyCode> binding in m_buttonBindings)
+			{
+				SwitchButtonAction(binding);
+			}
+		}
+
+		protected virtual void SwitchButtonAction(KeyValuePair<ButtonGesture, KeyCode> binding)
 		{
 			switch (binding.Key.ButtonAction)
 			{
@@ -70,6 +89,12 @@ namespace InputRegistrar
 						m_buttonEvents[binding.Key]();
 					break;
 			}
+		}
+
+		public override void UnbindAll()
+		{
+			base.UnbindAll();
+			m_buttonBindings.Clear();
 		}
 	}
 }

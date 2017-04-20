@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace InputRegistrar
 {
-	public class XboxInputRegistrar : InputRegistrar<ButtonInput.Xbox, AxisInput.Xbox>
+	public class XboxInputRegistrar : GamepadInputRegistrar<ButtonInput.Xbox, AxisInput.Xbox>
 	{
 		public XboxInputRegistrar(int controllerNumber)
 		{
@@ -32,56 +32,45 @@ namespace InputRegistrar
 			RegisterAxis(InputValue.Theta, AxisInput.Xbox.RightTrigger);
 		}
 
-		protected override void SwitchAxisAction(KeyValuePair<AxisGesture, AxisInput.Xbox> binding)
+		protected override void RegisterAxis(AxisGesture gesture, AxisInput.Xbox axis)
 		{
-			string axisname = "";
-			switch (binding.Value)
+			string input = string.Empty;
+			switch (axis)
 			{
 				case AxisInput.Xbox.LeftX:
-					axisname = "XAxis_";
+					input = "XAxis_";
 					break;
 				case AxisInput.Xbox.LeftY:
-					axisname = "YAxis_";
+					input = "YAxis_";
 					break;
 				case AxisInput.Xbox.BothTriggers:
-					axisname = "3rd_Axis_";
+					input = "3rd_Axis_";
 					break;
 				case AxisInput.Xbox.RightX:
-					axisname = "4th_Axis_";
+					input = "4th_Axis_";
 					break;
 				case AxisInput.Xbox.RightY:
-					axisname = "5th_Axis_";
+					input = "5th_Axis_";
 					break;
 				case AxisInput.Xbox.DPadX:
-					axisname = "6th_Axis_";
+					input = "6th_Axis_";
 					break;
 				case AxisInput.Xbox.DPadY:
-					axisname = "7th_Axis_";
+					input = "7th_Axis_";
 					break;
 				case AxisInput.Xbox.LeftTrigger:
-					axisname = "9th_Axis_";
+					input = "9th_Axis_";
 					break;
 				case AxisInput.Xbox.RightTrigger:
-					axisname = "10th_Axis_";
+					input = "10th_Axis_";
 					break;
 			}
-			if (axisname != "")
+			input += m_controllerNumber;
+
+			m_axisBindings.Add(gesture, input);
+			if (!m_axisEvents.ContainsKey(gesture))
 			{
-				axisname += m_controllerNumber;
-				float value = Input.GetAxis(axisname);
-				switch (binding.Key.AxisAction)
-				{
-					case AxisAction.GetAxis:
-						if (value != 0)
-							m_axisEvents[binding.Key](value);
-						break;
-					case AxisAction.GetAxisRaw:
-						if (value > 0)
-							m_axisEvents[binding.Key](1f);
-						else if (value < 0)
-							m_axisEvents[binding.Key](-1f);
-						break;
-				}
+				m_axisEvents.Add(gesture, delegate { });
 			}
 		}
 	}

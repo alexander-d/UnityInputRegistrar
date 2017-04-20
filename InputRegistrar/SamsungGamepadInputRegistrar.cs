@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace InputRegistrar
 {
-	public class SamsungGamepadInputRegistrar : InputRegistrar<ButtonInput.Samsung, AxisInput.Samsung>
+	public class SamsungGamepadInputRegistrar : GamepadInputRegistrar<ButtonInput.Samsung, AxisInput.Samsung>
 	{
 		public SamsungGamepadInputRegistrar(int controllerNumber)
 		{
@@ -34,47 +34,36 @@ namespace InputRegistrar
 			RegisterAxis(InputValue.Zeta, AxisInput.Samsung.DPadY);
 		}
 
-		protected override void SwitchAxisAction(KeyValuePair<AxisGesture, AxisInput.Samsung> binding)
+		protected override void RegisterAxis(AxisGesture gesture, AxisInput.Samsung axis)
 		{
-			string axisname = "";
-			switch (binding.Value)
+			string input = string.Empty;
+			switch (axis)
 			{
 				case AxisInput.Samsung.LeftX:
-					axisname = "XAxis_";
+					input = "XAxis_";
 					break;
 				case AxisInput.Samsung.LeftY:
-					axisname = "YAxis_";
+					input = "YAxis_";
 					break;
 				case AxisInput.Samsung.RightX:
-					axisname = "3rd_Axis_";
+					input = "3rd_Axis_";
 					break;
 				case AxisInput.Samsung.RightY:
-					axisname = "4th_Axis_";
+					input = "4th_Axis_";
 					break;
 				case AxisInput.Samsung.DPadX:
-					axisname = "5th_Axis_";
+					input = "5th_Axis_";
 					break;
 				case AxisInput.Samsung.DPadY:
-					axisname = "6th_Axis_";
+					input = "6th_Axis_";
 					break;
 			}
-			if (axisname != "")
+			input += m_controllerNumber;
+
+			m_axisBindings.Add(gesture, input);
+			if (!m_axisEvents.ContainsKey(gesture))
 			{
-				axisname += m_controllerNumber;
-				float value = Input.GetAxis(axisname);
-				switch (binding.Key.AxisAction)
-				{
-					case AxisAction.GetAxis:
-						if (value != 0)
-							m_axisEvents[binding.Key](value);
-						break;
-					case AxisAction.GetAxisRaw:
-						if (value > 0)
-							m_axisEvents[binding.Key](1f);
-						else if (value < 0)
-							m_axisEvents[binding.Key](-1f);
-						break;
-				}
+				m_axisEvents.Add(gesture, delegate { });
 			}
 		}
 	}
