@@ -47,7 +47,23 @@ namespace InputRegistrar
 		{
 			//TODO
 		}
-		
+
+		protected void RegisterButton(InputValue value, TButton button)
+		{
+			RegisterButton(new ButtonGesture(value, ButtonAction.OnPressDown), button);
+			RegisterButton(new ButtonGesture(value, ButtonAction.OnPress), button);
+			RegisterButton(new ButtonGesture(value, ButtonAction.OnPressUp), button);
+		}
+
+		protected void RegisterTouchButton(InputValue value, TButton button)
+		{
+			RegisterButton(new ButtonGesture(value, ButtonAction.OnTouchDown), button);
+			RegisterButton(new ButtonGesture(value, ButtonAction.OnTouch), button);
+			RegisterButton(new ButtonGesture(value, ButtonAction.OnTouchUp), button);
+		}
+
+		protected virtual void RegisterButton(ButtonGesture gesture, TButton button) { }
+
 		public override void UnbindAll()
 		{
 			m_buttonEvents.Clear();
@@ -61,10 +77,13 @@ namespace InputRegistrar
 			//TODO
 		}
 
-		public override void Update()
+		protected void RegisterAxis(InputValue value, TAxis axis)
 		{
-			base.Update();
-		}		
+			RegisterAxis(new AxisGesture(value, AxisAction.GetAxis), axis);
+			RegisterAxis(new AxisGesture(value, AxisAction.GetAxisRaw), axis);
+		}
+
+		protected virtual void RegisterAxis(AxisGesture gesture, TAxis axis) { }
 
 		public override void UnbindAll()
 		{
@@ -73,39 +92,25 @@ namespace InputRegistrar
 		}
 	}
 
-	public class InputRegistrar<TButton, TAxis, T2Axis> : InputRegistrar
+	public class InputRegistrar<TButton, TAxis, T2Axis> : InputRegistrar<TButton, TAxis>
 	{
-		protected Dictionary<AxisGesture, T2Axis> m_doubleAxisBindings;
-
-		public override void Initialise()
-		{
-			base.Initialise();
-			m_doubleAxisBindings = new Dictionary<AxisGesture, T2Axis>();
-		}
 
 		public override void ShowBindings()
 		{
 			//TODO
 		}
 
-		public override void Update()
+		protected void RegisterDoubleAxis(InputValue value, T2Axis axis)
 		{
-			base.Update();
-			foreach (KeyValuePair<AxisGesture, T2Axis> binding in m_doubleAxisBindings)
-			{
-				SwitchDoubleAxisAction(binding);
-			}
+			RegisterDoubleAxis(new AxisGesture(value, AxisAction.GetAxis), axis);
 		}
 
-		protected virtual void SwitchDoubleAxisAction(KeyValuePair<AxisGesture, T2Axis> binding) { }
+		protected virtual void RegisterDoubleAxis(AxisGesture gesture, T2Axis axis) { }
 
-		protected void RegisterDoubleAxis(AxisGesture gesture, T2Axis axis)
+		public override void UnbindAll()
 		{
-			m_doubleAxisBindings.Add(gesture, axis);
-			if (!m_doubleAxisEvents.ContainsKey(gesture))
-			{
-				m_doubleAxisEvents.Add(gesture, delegate { });
-			}
+			base.UnbindAll();
+			m_doubleAxisEvents.Clear();
 		}
 	}
 }

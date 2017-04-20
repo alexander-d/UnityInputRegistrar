@@ -30,14 +30,7 @@ namespace InputRegistrar
 			RegisterButton(InputValue.Psi, KeyCode.DownArrow);
 		}
 
-		protected void RegisterButton(InputValue value, KeyCode button)
-		{
-			RegisterButton(new ButtonGesture(value, ButtonAction.OnPressDown), button);
-			RegisterButton(new ButtonGesture(value, ButtonAction.OnPress), button);
-			RegisterButton(new ButtonGesture(value, ButtonAction.OnPressUp), button);
-		}
-
-		protected virtual void RegisterButton(ButtonGesture gesture, KeyCode button)
+		protected override void RegisterButton(ButtonGesture gesture, KeyCode button)
 		{
 			// TODO: this does not work, the KeyCodes do not align with the expected string inputs for some reason
 			m_buttonBindings.Add(gesture, button);

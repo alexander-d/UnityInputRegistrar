@@ -16,14 +16,7 @@ namespace InputRegistrar
 			m_axisBindings = new Dictionary<AxisGesture, string>();
 		}
 
-		protected void RegisterButton(InputValue value, TButton button)
-		{
-			RegisterButton(new ButtonGesture(value, ButtonAction.OnPressDown), button);
-			RegisterButton(new ButtonGesture(value, ButtonAction.OnPress), button);
-			RegisterButton(new ButtonGesture(value, ButtonAction.OnPressUp), button);
-		}
-
-		protected virtual void RegisterButton(ButtonGesture gesture, TButton button)
+		protected override void RegisterButton(ButtonGesture gesture, TButton button)
 		{
 			if (!typeof(TButton).IsEnum)
 			{
@@ -46,14 +39,6 @@ namespace InputRegistrar
 				m_buttonEvents.Add(gesture, delegate { });
 			}
 		}
-
-		protected void RegisterAxis(InputValue value, TAxis axis)
-		{
-			RegisterAxis(new AxisGesture(value, AxisAction.GetAxis), axis);
-			RegisterAxis(new AxisGesture(value, AxisAction.GetAxisRaw), axis);
-		}
-
-		protected virtual void RegisterAxis(AxisGesture gesture, TAxis axis) { }
 
 		public override void Update()
 		{
