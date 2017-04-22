@@ -272,18 +272,11 @@ namespace InputRegistrar
 				m_inputRegistrar.Update();
 		}
 
-		public void UnbindAllInputs()
-		{
-			//TODO: does not work right now
-			m_inputRegistrar.UnbindAll();
-		}
-
 		public void UnregisterAllInputs()
 		{
 			if (m_inputRegistrar != null)
 			{
 				m_inputRegistrar.UnbindAll();
-				m_inputRegistrar = null;
 			}
 		}
 

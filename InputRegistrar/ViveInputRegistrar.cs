@@ -148,13 +148,5 @@ namespace InputRegistrar
             
             device.TriggerHapticPulse(_intensity);
 		}
-
-		public override void UnbindAll()
-		{
-			base.UnbindAll();
-			m_buttonBindings.Clear();
-			m_axisBindings.Clear();
-			m_doubleAxisBindings.Clear();
-		}
 	}
 }

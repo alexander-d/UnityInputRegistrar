@@ -66,7 +66,11 @@ namespace InputRegistrar
 
 		public override void UnbindAll()
 		{
-			m_buttonEvents.Clear();
+			ButtonGesture[] buttonGestures = m_buttonEvents.Keys.ToArray();
+			for (int i = 0; i < buttonGestures.Length; i++)
+			{
+				m_buttonEvents[buttonGestures[i]] = delegate { };
+			}
 		}
 	}
 
@@ -88,7 +92,11 @@ namespace InputRegistrar
 		public override void UnbindAll()
 		{
 			base.UnbindAll();
-			m_axisEvents.Clear();
+			AxisGesture[] axisGestures = m_axisEvents.Keys.ToArray();
+			for (int i = 0; i < axisGestures.Length; i++)
+			{
+				m_axisEvents[axisGestures[i]] = delegate { };
+			}
 		}
 	}
 
@@ -110,7 +118,11 @@ namespace InputRegistrar
 		public override void UnbindAll()
 		{
 			base.UnbindAll();
-			m_doubleAxisEvents.Clear();
+			AxisGesture[] doubleAxisGestures = m_doubleAxisEvents.Keys.ToArray();
+			for (int i = 0; i < doubleAxisGestures.Length; i++)
+			{
+				m_doubleAxisEvents[doubleAxisGestures[i]] = delegate { };
+			}
 		}
 	}
 }

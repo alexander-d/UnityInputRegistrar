@@ -82,11 +82,5 @@ namespace InputRegistrar
 					break;
 			}
 		}
-
-		public override void UnbindAll()
-		{
-			base.UnbindAll();
-			m_buttonBindings.Clear();
-		}
 	}
 }
