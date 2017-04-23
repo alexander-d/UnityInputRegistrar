@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections.Generic;
 
 namespace InputRegistrar
@@ -33,52 +34,25 @@ namespace InputRegistrar
 		protected override void RegisterButton(ButtonGesture gesture, KeyCode button)
 		{
 			m_buttonBindings.Add(gesture, button);
-			if (!m_buttonEvents.ContainsKey(gesture))
-			{
-				m_buttonEvents.Add(gesture, delegate { });
-			}
 		}
-
-		public override void Update()
-		{
-			foreach (KeyValuePair<ButtonGesture, KeyCode> binding in m_buttonBindings)
-			{
-				SwitchButtonAction(binding);
-			}
-		}
-
-		protected virtual void SwitchButtonAction(KeyValuePair<ButtonGesture, KeyCode> binding)
+		
+		protected override void CheckForButtonInput(KeyValuePair<ButtonGesture, Action> binding)
 		{
 			switch (binding.Key.ButtonAction)
 			{
 				case ButtonAction.OnPressDown:
-					if (Input.GetKeyDown(binding.Value))
-						m_buttonEvents[binding.Key]();
+					if (Input.GetKeyDown(m_buttonBindings[binding.Key]))
+						binding.Value();
 					break;
 
 				case ButtonAction.OnPress:
-					if (Input.GetKey(binding.Value))
-						m_buttonEvents[binding.Key]();
+					if (Input.GetKey(m_buttonBindings[binding.Key]))
+						binding.Value();
 					break;
 
 				case ButtonAction.OnPressUp:
-					if (Input.GetKeyUp(binding.Value))
-						m_buttonEvents[binding.Key]();
-					break;
-
-				case ButtonAction.OnTouchDown:
-					if (Input.GetKeyDown(binding.Value))
-						m_buttonEvents[binding.Key]();
-					break;
-
-				case ButtonAction.OnTouch:
-					if (Input.GetKey(binding.Value))
-						m_buttonEvents[binding.Key]();
-					break;
-
-				case ButtonAction.OnTouchUp:
-					if (Input.GetKeyUp(binding.Value))
-						m_buttonEvents[binding.Key]();
+					if (Input.GetKeyUp(m_buttonBindings[binding.Key]))
+						binding.Value();
 					break;
 			}
 		}

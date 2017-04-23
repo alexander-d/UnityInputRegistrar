@@ -61,10 +61,6 @@ namespace InputRegistrar
 			input += m_controllerNumber;
 
 			m_axisBindings.Add(gesture, input);
-			if (!m_axisEvents.ContainsKey(gesture))
-			{
-				m_axisEvents.Add(gesture, delegate { });
-			}
 		}
 	}
 }

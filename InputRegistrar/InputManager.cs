@@ -128,7 +128,7 @@ namespace InputRegistrar
 		Omega
 	}
 
-	public class ButtonGesture
+	public struct ButtonGesture
 	{
 		public InputValue InputValue;
 		public ButtonAction ButtonAction;
@@ -138,45 +138,9 @@ namespace InputRegistrar
 			InputValue = value;
 			ButtonAction = action;
 		}
-
-		public static bool operator ==(ButtonGesture thisGesture, ButtonGesture otherGesture)
-		{
-			if (thisGesture.ButtonAction == otherGesture.ButtonAction &&
-				thisGesture.InputValue == otherGesture.InputValue)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-
-		public static bool operator !=(ButtonGesture thisGesture, ButtonGesture otherGesture)
-		{
-			if (thisGesture.ButtonAction == otherGesture.ButtonAction &&
-				thisGesture.InputValue == otherGesture.InputValue)
-			{
-				return false;
-			}
-			else
-			{
-				return true;
-			}
-		}
-
-		public override bool Equals(object obj)
-		{
-			return base.Equals(obj);
-		}
-
-		public override int GetHashCode()
-		{
-			return base.GetHashCode();
-		}
 	}
 
-	public class AxisGesture
+	public struct AxisGesture
 	{
 		public InputValue InputValue;
 		public AxisAction AxisAction;
@@ -185,42 +149,6 @@ namespace InputRegistrar
 		{
 			InputValue = value;
 			AxisAction = action;
-		}
-
-		public static bool operator ==(AxisGesture thisGesture, AxisGesture otherGesture)
-		{
-			if (thisGesture.AxisAction == otherGesture.AxisAction &&
-				thisGesture.InputValue == otherGesture.InputValue)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-
-		public static bool operator !=(AxisGesture thisGesture, AxisGesture otherGesture)
-		{
-			if (thisGesture.AxisAction == otherGesture.AxisAction &&
-				thisGesture.InputValue == otherGesture.InputValue)
-			{
-				return false;
-			}
-			else
-			{
-				return true;
-			}
-		}
-
-		public override bool Equals(object obj)
-		{
-			return base.Equals(obj);
-		}
-
-		public override int GetHashCode()
-		{
-			return base.GetHashCode();
 		}
 	}
 
@@ -268,112 +196,47 @@ namespace InputRegistrar
 
 		public void Update()
 		{
-			if (m_inputRegistrar != null)
-				m_inputRegistrar.Update();
+			m_inputRegistrar.Update();
+		}
+
+		public void ShowBindings()
+		{
+			m_inputRegistrar.ShowAllInputs();
 		}
 
 		public void UnregisterAllInputs()
 		{
-			if (m_inputRegistrar != null)
-			{
-				m_inputRegistrar.UnbindAll();
-			}
+			m_inputRegistrar.UnregisterAllInputs();
 		}
 
-		public void RegisterButtonInput(ButtonGesture _gesture, Action action)
+		public void RegisterButtonInput(ButtonGesture gesture, Action action)
 		{
-			foreach (ButtonGesture gesture in m_inputRegistrar.m_buttonEvents.Keys.ToArray())
-			{
-				if (gesture == _gesture)
-				{
-					m_inputRegistrar.m_buttonEvents[gesture] += action;
-					break;
-				}
-			}
+			m_inputRegistrar.m_buttonEvents[gesture] = action;
 		}
 
-		public void RegisterAxisInput(AxisGesture _gesture, Action<float> action)
+		public void RegisterAxisInput(AxisGesture gesture, Action<float> action)
 		{
-			foreach (AxisGesture gesture in m_inputRegistrar.m_axisEvents.Keys.ToArray())
-			{
-				if (gesture == _gesture)
-				{
-					m_inputRegistrar.m_axisEvents[gesture] += action;
-					break;
-				}
-			}
+			m_inputRegistrar.m_axisEvents[gesture] = action;
 		}
 
-		public void RegisterAxisInput(AxisGesture _gesture, Action<Vector2> action)
+		public void RegisterDoubleAxisInput(AxisGesture gesture, Action<Vector2> action)
 		{
-			foreach (AxisGesture gesture in m_inputRegistrar.m_doubleAxisEvents.Keys.ToArray())
-			{
-				if (gesture == _gesture)
-				{
-					m_inputRegistrar.m_doubleAxisEvents[gesture] += action;
-					break;
-				}
-			}
+			m_inputRegistrar.m_doubleAxisEvents[gesture] = action;
 		}
 
-		public void UnregisterButtonInput(ButtonGesture _gesture)
+		public void UnregisterButtonInput(ButtonGesture gesture)
 		{
-			foreach (ButtonGesture gesture in m_inputRegistrar.m_buttonEvents.Keys.ToArray())
-			{
-				if (gesture == _gesture)
-				{
-					m_inputRegistrar.m_buttonEvents[gesture] = delegate { };
-					break;
-				}
-			}
+			m_inputRegistrar.m_buttonEvents.Remove(gesture);
 		}
 
-		public void UnregisterButtonInput(ButtonGesture _gesture, Action action)
+		public void UnregisterAxisInput(AxisGesture gesture)
 		{
-			foreach (ButtonGesture gesture in m_inputRegistrar.m_buttonEvents.Keys.ToArray())
-			{
-				if (gesture == _gesture)
-				{
-					m_inputRegistrar.m_buttonEvents[gesture] -= action;
-					break;
-				}
-			}
+			m_inputRegistrar.m_axisEvents.Remove(gesture);
 		}
 
-		public void UnregisterAxisInput(AxisGesture _gesture)
+		public void UnregisterDoubleAxisInput(AxisGesture gesture)
 		{
-			foreach (AxisGesture gesture in m_inputRegistrar.m_axisEvents.Keys.ToArray())
-			{
-				if (gesture == _gesture)
-				{
-					m_inputRegistrar.m_axisEvents[gesture] = delegate { };
-					break;
-				}
-			}
-		}
-
-		public void UnregisterAxisInput(AxisGesture _gesture, Action<float> action)
-		{
-			foreach (AxisGesture gesture in m_inputRegistrar.m_axisEvents.Keys.ToArray())
-			{
-				if (gesture == _gesture)
-				{
-					m_inputRegistrar.m_axisEvents[gesture] -= action;
-					break;
-				}
-			}
-		}
-
-		public void UnregisterAxisInput(AxisGesture _gesture, Action<Vector2> action)
-		{
-			foreach (AxisGesture gesture in m_inputRegistrar.m_doubleAxisEvents.Keys.ToArray())
-			{
-				if (gesture == _gesture)
-				{
-					m_inputRegistrar.m_doubleAxisEvents[gesture] -= action;
-					break;
-				}
-			}
+			m_inputRegistrar.m_doubleAxisEvents.Remove(gesture);
 		}
 
 		public void VibrateController(float _intensity)

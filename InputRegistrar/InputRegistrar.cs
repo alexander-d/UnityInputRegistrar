@@ -36,16 +36,31 @@ namespace InputRegistrar
 			m_doubleAxisEvents = new Dictionary<AxisGesture, Action<Vector2>>();
 		}
 
-		public virtual void ShowBindings() { }
 		public virtual void Update() { }
-		public virtual void UnbindAll() { }
+		public virtual void ShowAllInputs() { }
+		public virtual void UnregisterAllInputs() { }
 	}
 
 	public class InputRegistrar<TButton> : InputRegistrar
 	{
-		public override void ShowBindings()
+		public override void Update()
+		{
+			foreach (KeyValuePair<ButtonGesture, Action> binding in m_buttonEvents)
+			{
+				CheckForButtonInput(binding);
+			}
+		}
+
+		protected virtual void CheckForButtonInput(KeyValuePair<ButtonGesture, Action> binding) { }
+
+		public override void ShowAllInputs()
 		{
 			//TODO
+			ButtonGesture[] buttonGestures = m_buttonEvents.Keys.ToArray();
+			for (int i = 0; i < buttonGestures.Length; i++)
+			{
+				Debug.Log(m_buttonEvents[buttonGestures[i]].Method.Name);
+			}
 		}
 
 		protected void RegisterButton(InputValue value, TButton button)
@@ -64,20 +79,32 @@ namespace InputRegistrar
 
 		protected virtual void RegisterButton(ButtonGesture gesture, TButton button) { }
 
-		public override void UnbindAll()
+		public override void UnregisterAllInputs()
 		{
 			ButtonGesture[] buttonGestures = m_buttonEvents.Keys.ToArray();
 			for (int i = 0; i < buttonGestures.Length; i++)
 			{
-				m_buttonEvents[buttonGestures[i]] = delegate { };
+				m_buttonEvents.Remove(buttonGestures[i]);
 			}
 		}
 	}
 
 	public class InputRegistrar<TButton, TAxis> : InputRegistrar<TButton>
 	{
-		public override void ShowBindings()
+		public override void Update()
 		{
+			base.Update();
+			foreach (KeyValuePair<AxisGesture, Action<float>> binding in m_axisEvents)
+			{
+				CheckForAxisInput(binding);
+			}
+		}
+		
+		protected virtual void CheckForAxisInput(KeyValuePair<AxisGesture, Action<float>> binding) { }
+
+		public override void ShowAllInputs()
+		{
+			base.ShowAllInputs();
 			//TODO
 		}
 
@@ -89,22 +116,33 @@ namespace InputRegistrar
 
 		protected virtual void RegisterAxis(AxisGesture gesture, TAxis axis) { }
 
-		public override void UnbindAll()
+		public override void UnregisterAllInputs()
 		{
-			base.UnbindAll();
+			base.UnregisterAllInputs();
 			AxisGesture[] axisGestures = m_axisEvents.Keys.ToArray();
 			for (int i = 0; i < axisGestures.Length; i++)
 			{
-				m_axisEvents[axisGestures[i]] = delegate { };
+				m_axisEvents.Remove(axisGestures[i]);
 			}
 		}
 	}
 
 	public class InputRegistrar<TButton, TAxis, T2Axis> : InputRegistrar<TButton, TAxis>
 	{
-
-		public override void ShowBindings()
+		public override void Update()
 		{
+			base.Update();
+			foreach (KeyValuePair<AxisGesture, Action<Vector2>> binding in m_doubleAxisEvents)
+			{
+				CheckForDoubleAxisInput(binding);
+			}
+		}
+
+		protected virtual void CheckForDoubleAxisInput(KeyValuePair<AxisGesture, Action<Vector2>> binding) { }
+
+		public override void ShowAllInputs()
+		{
+			base.ShowAllInputs();
 			//TODO
 		}
 
@@ -115,13 +153,13 @@ namespace InputRegistrar
 
 		protected virtual void RegisterDoubleAxis(AxisGesture gesture, T2Axis axis) { }
 
-		public override void UnbindAll()
+		public override void UnregisterAllInputs()
 		{
-			base.UnbindAll();
+			base.UnregisterAllInputs();
 			AxisGesture[] doubleAxisGestures = m_doubleAxisEvents.Keys.ToArray();
 			for (int i = 0; i < doubleAxisGestures.Length; i++)
 			{
-				m_doubleAxisEvents[doubleAxisGestures[i]] = delegate { };
+				m_doubleAxisEvents.Remove(doubleAxisGestures[i]);
 			}
 		}
 	}

@@ -34,55 +34,39 @@ namespace InputRegistrar
 				input = "joystick " + m_controllerNumber.ToString() + " button " + (int)Enum.Parse(typeof(TButton), button.ToString());
 			}
 			m_buttonBindings.Add(gesture, input);
-			if (!m_buttonEvents.ContainsKey(gesture))
-			{
-				m_buttonEvents.Add(gesture, delegate { });
-			}
 		}
 
-		public override void Update()
-		{
-			foreach (KeyValuePair<ButtonGesture, string> binding in m_buttonBindings)
-			{
-				SwitchButtonAction(binding);
-			}
-			foreach (KeyValuePair<AxisGesture, string> binding in m_axisBindings)
-			{
-				SwitchAxisAction(binding);
-			}
-		}
-
-		protected virtual void SwitchButtonAction(KeyValuePair<ButtonGesture, string> binding)
+		protected override void CheckForButtonInput(KeyValuePair<ButtonGesture, Action> binding)
 		{
 			switch (binding.Key.ButtonAction)
 			{
 				case ButtonAction.OnPressDown:
-					if (Input.GetKeyDown(binding.Value))
-						m_buttonEvents[binding.Key]();
+					if (Input.GetKeyDown(m_buttonBindings[binding.Key]))
+						binding.Value();
 					break;
 
 				case ButtonAction.OnPress:
-					if (Input.GetKey(binding.Value))
-						m_buttonEvents[binding.Key]();
+					if (Input.GetKey(m_buttonBindings[binding.Key]))
+						binding.Value();
 					break;
 
 				case ButtonAction.OnPressUp:
-					if (Input.GetKeyUp(binding.Value))
-						m_buttonEvents[binding.Key]();
+					if (Input.GetKeyUp(m_buttonBindings[binding.Key]))
+						binding.Value();
 					break;
 			}
 		}
 
-		protected virtual void SwitchAxisAction(KeyValuePair<AxisGesture, string> binding)
+		protected override void CheckForAxisInput(KeyValuePair<AxisGesture, Action<float>> binding)
 		{
 			switch (binding.Key.AxisAction)
 			{
 				case AxisAction.GetAxis:
-					m_axisEvents[binding.Key](Input.GetAxis(binding.Value));
+					binding.Value(Input.GetAxis(m_axisBindings[binding.Key]));
 					break;
 
 				case AxisAction.GetAxisRaw:
-					m_axisEvents[binding.Key](Input.GetAxisRaw(binding.Value));
+					binding.Value(Input.GetAxisRaw(m_axisBindings[binding.Key]));
 					break;
 			}
 		}
