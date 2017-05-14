@@ -14,22 +14,26 @@ namespace InputRegistrar
 		public override void Initialise()
 		{
 			base.Initialise();
-
+			
 			//Face Buttons
-			RegisterButton(InputValue.Alpha, ButtonInput.Xbox.A);
-			RegisterButton(InputValue.Beta, ButtonInput.Xbox.B);
-			RegisterButton(InputValue.Gamma, ButtonInput.Xbox.X);
-			RegisterButton(InputValue.Delta, ButtonInput.Xbox.Y);
+			m_inputButtonBindings.Add(InputValue.Alpha, ButtonInput.Xbox.A);
+			m_inputButtonBindings.Add(InputValue.Beta, ButtonInput.Xbox.B);
+			m_inputButtonBindings.Add(InputValue.Gamma, ButtonInput.Xbox.X);
+			m_inputButtonBindings.Add(InputValue.Delta, ButtonInput.Xbox.Y);
+
+			RegisterButtons();
 
 			//Axes
-			RegisterAxis(InputValue.Alpha, AxisInput.Xbox.LeftX);
-			RegisterAxis(InputValue.Beta, AxisInput.Xbox.LeftY);
-			RegisterAxis(InputValue.Gamma, AxisInput.Xbox.RightX);
-			RegisterAxis(InputValue.Delta, AxisInput.Xbox.RightY);
-			RegisterAxis(InputValue.Epsilon, AxisInput.Xbox.DPadX);
-			RegisterAxis(InputValue.Zeta, AxisInput.Xbox.DPadY);
-			RegisterAxis(InputValue.Eta, AxisInput.Xbox.LeftTrigger);
-			RegisterAxis(InputValue.Theta, AxisInput.Xbox.RightTrigger);
+			m_inputAxisBindings.Add(InputValue.Alpha, AxisInput.Xbox.LeftX);
+			m_inputAxisBindings.Add(InputValue.Beta, AxisInput.Xbox.LeftY);
+			m_inputAxisBindings.Add(InputValue.Gamma, AxisInput.Xbox.RightX);
+			m_inputAxisBindings.Add(InputValue.Delta, AxisInput.Xbox.RightY);
+			m_inputAxisBindings.Add(InputValue.Epsilon, AxisInput.Xbox.DPadX);
+			m_inputAxisBindings.Add(InputValue.Zeta, AxisInput.Xbox.DPadY);
+			m_inputAxisBindings.Add(InputValue.Eta, AxisInput.Xbox.LeftTrigger);
+			m_inputAxisBindings.Add(InputValue.Theta, AxisInput.Xbox.RightTrigger);
+
+			RegisterAxes();
 		}
 
 		protected override void RegisterAxis(AxisGesture gesture, AxisInput.Xbox axis)

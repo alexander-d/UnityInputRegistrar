@@ -37,12 +37,19 @@ namespace InputRegistrar
 		}
 
 		public virtual void Update() { }
-		public virtual void ShowAllInputs() { }
 		public virtual void UnregisterAllInputs() { }
 	}
 
 	public class InputRegistrar<TButton> : InputRegistrar
 	{
+		public Dictionary<InputValue, TButton> m_inputButtonBindings;
+
+		public override void Initialise()
+		{
+			base.Initialise();
+			m_inputButtonBindings = new Dictionary<InputValue, TButton>();
+		}
+
 		public override void Update()
 		{
 			foreach (KeyValuePair<ButtonGesture, Action> binding in m_buttonEvents)
@@ -53,13 +60,11 @@ namespace InputRegistrar
 
 		protected virtual void CheckForButtonInput(KeyValuePair<ButtonGesture, Action> binding) { }
 
-		public override void ShowAllInputs()
+		protected void RegisterButtons()
 		{
-			//TODO
-			ButtonGesture[] buttonGestures = m_buttonEvents.Keys.ToArray();
-			for (int i = 0; i < buttonGestures.Length; i++)
+			foreach (KeyValuePair<InputValue, TButton> buttonBinding in m_inputButtonBindings)
 			{
-				Debug.Log(m_buttonEvents[buttonGestures[i]].Method.Name);
+				RegisterButton(buttonBinding.Key, buttonBinding.Value);
 			}
 		}
 
@@ -91,6 +96,14 @@ namespace InputRegistrar
 
 	public class InputRegistrar<TButton, TAxis> : InputRegistrar<TButton>
 	{
+		public Dictionary<InputValue, TAxis> m_inputAxisBindings;
+
+		public override void Initialise()
+		{
+			base.Initialise();
+			m_inputAxisBindings = new Dictionary<InputValue, TAxis>();
+		}
+
 		public override void Update()
 		{
 			base.Update();
@@ -102,10 +115,12 @@ namespace InputRegistrar
 		
 		protected virtual void CheckForAxisInput(KeyValuePair<AxisGesture, Action<float>> binding) { }
 
-		public override void ShowAllInputs()
+		protected void RegisterAxes()
 		{
-			base.ShowAllInputs();
-			//TODO
+			foreach (KeyValuePair<InputValue, TAxis> axisBinding in m_inputAxisBindings)
+			{
+				RegisterAxis(axisBinding.Key, axisBinding.Value);
+			}
 		}
 
 		protected void RegisterAxis(InputValue value, TAxis axis)
@@ -139,12 +154,6 @@ namespace InputRegistrar
 		}
 
 		protected virtual void CheckForDoubleAxisInput(KeyValuePair<AxisGesture, Action<Vector2>> binding) { }
-
-		public override void ShowAllInputs()
-		{
-			base.ShowAllInputs();
-			//TODO
-		}
 
 		protected void RegisterDoubleAxis(InputValue value, T2Axis axis)
 		{

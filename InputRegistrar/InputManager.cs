@@ -192,16 +192,11 @@ namespace InputRegistrar
 
 	public class InputManager
 	{
-		protected InputRegistrar m_inputRegistrar;
+		public InputRegistrar m_inputRegistrar;
 
 		public void Update()
 		{
 			m_inputRegistrar.Update();
-		}
-
-		public void ShowBindings()
-		{
-			m_inputRegistrar.ShowAllInputs();
 		}
 
 		public void UnregisterAllInputs()

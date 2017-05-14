@@ -16,22 +16,26 @@ namespace InputRegistrar
 			base.Initialise();
 
 			//Face Buttons
-			RegisterButton(InputValue.Alpha, ButtonInput.Samsung.One);
-			RegisterButton(InputValue.Beta, ButtonInput.Samsung.Two);
-			RegisterButton(InputValue.Gamma, ButtonInput.Samsung.Three);
-			RegisterButton(InputValue.Delta, ButtonInput.Samsung.Four);
+			m_inputButtonBindings.Add(InputValue.Alpha, ButtonInput.Samsung.One);
+			m_inputButtonBindings.Add(InputValue.Beta, ButtonInput.Samsung.Two);
+			m_inputButtonBindings.Add(InputValue.Gamma, ButtonInput.Samsung.Three);
+			m_inputButtonBindings.Add(InputValue.Delta, ButtonInput.Samsung.Four);
 
 			//Shoulder Buttons
-			RegisterButton(InputValue.Epsilon, ButtonInput.Samsung.LB);
-			RegisterButton(InputValue.Zeta, ButtonInput.Samsung.RB);
+			m_inputButtonBindings.Add(InputValue.Epsilon, ButtonInput.Samsung.LB);
+			m_inputButtonBindings.Add(InputValue.Zeta, ButtonInput.Samsung.RB);
+
+			RegisterButtons();
 
 			//Axes
-			RegisterAxis(InputValue.Alpha, AxisInput.Samsung.LeftX);
-			RegisterAxis(InputValue.Beta, AxisInput.Samsung.LeftY);
-			RegisterAxis(InputValue.Gamma, AxisInput.Samsung.RightX);
-			RegisterAxis(InputValue.Delta, AxisInput.Samsung.RightY);
-			RegisterAxis(InputValue.Epsilon, AxisInput.Samsung.DPadX);
-			RegisterAxis(InputValue.Zeta, AxisInput.Samsung.DPadY);
+			m_inputAxisBindings.Add(InputValue.Alpha, AxisInput.Samsung.LeftX);
+			m_inputAxisBindings.Add(InputValue.Beta, AxisInput.Samsung.LeftY);
+			m_inputAxisBindings.Add(InputValue.Gamma, AxisInput.Samsung.RightX);
+			m_inputAxisBindings.Add(InputValue.Delta, AxisInput.Samsung.RightY);
+			m_inputAxisBindings.Add(InputValue.Epsilon, AxisInput.Samsung.DPadX);
+			m_inputAxisBindings.Add(InputValue.Zeta, AxisInput.Samsung.DPadY);
+
+			RegisterAxes();
 		}
 
 		protected override void RegisterAxis(AxisGesture gesture, AxisInput.Samsung axis)

@@ -16,20 +16,24 @@ namespace InputRegistrar
 			base.Initialise();
 
 			//Face Buttons
-			RegisterButton(InputValue.Alpha, ButtonInput.PS4.X);
-			RegisterButton(InputValue.Beta, ButtonInput.PS4.Circle);
-			RegisterButton(InputValue.Gamma, ButtonInput.PS4.Square);
-			RegisterButton(InputValue.Delta, ButtonInput.PS4.Triangle);
+			m_inputButtonBindings.Add(InputValue.Alpha, ButtonInput.PS4.X);
+			m_inputButtonBindings.Add(InputValue.Beta, ButtonInput.PS4.Circle);
+			m_inputButtonBindings.Add(InputValue.Gamma, ButtonInput.PS4.Square);
+			m_inputButtonBindings.Add(InputValue.Delta, ButtonInput.PS4.Triangle);
+
+			RegisterButtons();
 
 			//Axes
-			RegisterAxis(InputValue.Alpha, AxisInput.PS4.LeftX);
-			RegisterAxis(InputValue.Beta, AxisInput.PS4.LeftY);
-			RegisterAxis(InputValue.Gamma, AxisInput.PS4.RightX);
-			RegisterAxis(InputValue.Delta, AxisInput.PS4.RightY);
-			RegisterAxis(InputValue.Epsilon, AxisInput.PS4.DPadX);
-			RegisterAxis(InputValue.Zeta, AxisInput.PS4.DPadY);
-			RegisterAxis(InputValue.Eta, AxisInput.PS4.L2);
-			RegisterAxis(InputValue.Theta, AxisInput.PS4.R2);
+			m_inputAxisBindings.Add(InputValue.Alpha, AxisInput.PS4.LeftX);
+			m_inputAxisBindings.Add(InputValue.Beta, AxisInput.PS4.LeftY);
+			m_inputAxisBindings.Add(InputValue.Gamma, AxisInput.PS4.RightX);
+			m_inputAxisBindings.Add(InputValue.Delta, AxisInput.PS4.RightY);
+			m_inputAxisBindings.Add(InputValue.Epsilon, AxisInput.PS4.DPadX);
+			m_inputAxisBindings.Add(InputValue.Zeta, AxisInput.PS4.DPadY);
+			m_inputAxisBindings.Add(InputValue.Eta, AxisInput.PS4.L2);
+			m_inputAxisBindings.Add(InputValue.Theta, AxisInput.PS4.R2);
+
+			RegisterAxes();
 		}
 
 		protected override void RegisterAxis(AxisGesture gesture, AxisInput.PS4 axis)
